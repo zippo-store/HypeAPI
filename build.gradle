@@ -1,0 +1,108 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+allprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+
+    group = 'me.doublenico'
+    version = '1.0.1'
+
+    compileJava.options.encoding = 'UTF-8'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(8)
+        }
+    }
+
+    configurations {
+        shaded
+        compile.extendsFrom shaded
+    }
+
+    processResources {
+        inputs.property("version", project.version)
+
+        filter ReplaceTokens, tokens: [
+                'VERSION': project.version
+        ]
+    }
+
+    afterEvaluate {
+        jar {
+            duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+            dependsOn configurations.shaded
+            from configurations.shaded.collect {
+                it.isDirectory() ?
+                        it :
+                        zipTree(it)
+            }
+        }
+    }
+}
+
+dependencies {
+    subprojects.each { p ->
+        if (p.name == "core") {
+            shaded(project(path: ':core', configuration: 'shadow'))
+            return
+        }
+        shaded(p) {
+            transitive false
+        }
+    }
+}
+
+subprojects { subproj ->
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven {
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+        maven {
+            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
+
+        maven {
+            url 'https://maven.elmakers.com/repository/'
+        }
+
+        maven {
+            url 'https://repo.aikar.co/nexus/content/groups/aikar'
+        }
+        maven {
+            url 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+        }
+    }
+/*    def versionJava = 8
+    if (subproj.hasProperty("javaVersion")) {
+        versionJava = subproj.property("javaVersion")
+    }
+    subproj.tasks.withType(JavaCompile).configureEach {
+        javaCompiler = javaToolchains.compilerFor {
+            languageVersion = JavaLanguageVersion.of(versionJava)
+        }
+    }*/
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'me.doublenico'
+            artifactId = 'HypeAPI'
+            version = '1.0.1'
+
+            from components.java
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+

@@ -1,0 +1,34 @@
+message: 'Hello, world!'
+no_permission: '<gradient="red,blue">You have no permisison</gradient>'
+no_id:
+  format: true
+  1:
+    message: 'Hello, world! '
+    hover:
+      action: "ACTION"
+      value: "ARGUMENT"
+    command: "command"
+    url: "url"
+    click:
+      action: "ACTION"
+      text: "Hello, world!"
+    suggest: "Hello, world!"
+    gradient:
+      align: "LEFT"
+      start: '#FF0000'
+      end: '#00FF00'
+  2:
+    message: 'Another message'
+    hover: "Hello, world!"
+    command: "command"
+    url: "url"
+    click:
+      action: "ACTION"
+      text: "Hello, world!"
+    suggest: "Hello, world!"
+    gradient:
+      align: "CENTER"
+      colors:
+        - '#FF0000'
+        - '#00FF00'
+        - '#0000FF'

@@ -1,0 +1,51 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
+    compileOnly 'me.clip:placeholderapi:2.10.10'
+    implementation 'com.github.PerryPlaysMC:DynamicJson:1.3.0'
+    api 'com.github.cryptomorin:XSeries:8.7.1'
+    implementation project (':wrapper')
+    implementation project (':v1_8_R1')
+    implementation project (':v1_8_R2')
+    implementation project (':v1_8_R3')
+    implementation project (':v1_9_R1')
+    implementation project (':v1_9_R2')
+    implementation project (':v1_10_R1')
+    implementation project (':v1_11_R1')
+    implementation project (':v1_12_R1')
+    implementation project (':v1_13_R1')
+    implementation project (':v1_13_R2')
+    implementation project (':v1_14_R1')
+    implementation project (':v1_15_R1')
+    implementation project (':v1_16_R1')
+    implementation project (':v1_16_R2')
+    implementation project (':v1_16_R3')
+    implementation project (':v1_17_R1')
+    implementation project (':v1_18_R1')
+    implementation project (':v1_18_R2')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    minimize()
+    def path = 'me.doublenico.hypeapi.shaded'
+    exclude 'com/cryptomorin/xseries/particles/*'
+    exclude 'com/cryptomorin/xseries/messages/*'
+    exclude 'com/cryptomorin/xseries/XBlock*'
+    exclude 'com/cryptomorin/xseries/XBiome*'
+    exclude 'com/cryptomorin/xseries/NoteBlockMusic*'
+    exclude 'com/cryptomorin/xseries/XItemStack*'
+    exclude 'com/cryptomorin/xseries/XEntity*'
+    exclude 'com/cryptomorin/xseries/XTag*'
+    exclude 'com/cryptomorin/xseries/XPotion*'
+    relocate ('com.cryptomorin.xseries', path + '.xseries')
+}

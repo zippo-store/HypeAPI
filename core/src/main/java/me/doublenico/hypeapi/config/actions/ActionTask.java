@@ -1,7 +1,7 @@
 package me.doublenico.hypeapi.config.actions;
 
 import com.cryptomorin.xseries.XSound;
-import dev.perryplaysmc.dynamicjson.DynamicJText;
+import dev.dynamicstudios.json.DynamicJText;
 import me.doublenico.hypeapi.actionbar.ActionBar;
 import me.doublenico.hypeapi.colors.ColorChat;
 import me.doublenico.hypeapi.title.Title;
@@ -70,7 +70,7 @@ public class ActionTask extends BukkitRunnable {
                 DynamicJText.parseJson(message).send(player);
                 break;
             case JSON_BROADCAST:
-                DynamicJText.parseJson(message).broadcast();
+                Bukkit.getOnlinePlayers().forEach(p -> DynamicJText.parseJson(message).send(p));
                 break;
         }
     }

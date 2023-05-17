@@ -1,10 +1,12 @@
 package me.doublenico.hypeapi.colors;
 
-import dev.perryplaysmc.dynamicjson.DynamicJText;
-import dev.perryplaysmc.dynamicjson.data.CColor;
+import dev.dynamicstudios.json.DynamicJText;
+import dev.dynamicstudios.json.data.component.DynamicGradientComponent;
+import dev.dynamicstudios.json.data.util.CColor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.doublenico.hypeapi.VersionUtils;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -66,7 +68,7 @@ public class ColorChat {
     }
 
     public static BaseComponent[] colorJSON(String message) {
-        if (!VersionUtils.hasHexSupport()) return new DynamicJText(CColor.translateAlternateColorCodes('&', message)).toComponents();
+        if (!VersionUtils.hasHexSupport()) return ComponentSerializer.parse(new DynamicJText().add(CColor.translateAlternateColorCodes('&', message)).json());
         String gradientRegex = "<gradient:((?:(?=#[a-fA-F0-9]{6}[;>])#[a-fA-F0-9]{6}[^>]?)+)>(.+)<.gradient>";
         Pattern pattern = Pattern.compile(gradientRegex);
         Matcher matcher = pattern.matcher(message);
@@ -89,9 +91,10 @@ public class ColorChat {
                 Bukkit.getLogger().warning("Gradient is not valid!");
                 continue;
             }
-            return new DynamicJText().gradient(gradients.toArray(new CColor[0])).add(text).finish().toComponents();
+            return ComponentSerializer.parse(new DynamicJText().gradient(true).add(new DynamicGradientComponent().colors(gradients.toArray(new CColor[0]))).json());
+
         }
-        return new DynamicJText().add(CColor.translateCommon(message)).toComponents();
+        return ComponentSerializer.parse(new DynamicJText().add(CColor.translateCommon(message)).json());
     }
 
     public static List<String> colorList(List<String> messages) {

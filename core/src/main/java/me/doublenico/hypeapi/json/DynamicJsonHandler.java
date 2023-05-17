@@ -1,10 +1,10 @@
 package me.doublenico.hypeapi.json;
 
-import dev.perryplaysmc.dynamicjson.DynamicJText;
-import dev.perryplaysmc.dynamicjson.data.CColor;
-import dev.perryplaysmc.dynamicjson.data.DynamicClickAction;
-import dev.perryplaysmc.dynamicjson.data.DynamicHoverAction;
-import me.clip.placeholderapi.PlaceholderAPI;
+import dev.dynamicstudios.json.DynamicJText;
+import dev.dynamicstudios.json.data.component.DynamicGradientComponent;
+import dev.dynamicstudios.json.data.util.CColor;
+import dev.dynamicstudios.json.data.util.DynamicClickAction;
+import dev.dynamicstudios.json.data.util.DynamicHoverAction;
 import me.doublenico.hypeapi.actionbar.ActionBar;
 import me.doublenico.hypeapi.colors.ColorChat;
 import me.doublenico.hypeapi.title.Title;
@@ -66,7 +66,7 @@ public class DynamicJsonHandler {
 
         if (config.get(path) == null) {Bukkit.getLogger().warning("[HypeAPI] The path " + path + " does not exist in the configuration file.");return;}
 
-        if(!config.getBoolean(path + ".format")) {DynamicJText.parse((ColorChat.convert(player, config.getString(path)))).send(player);return;}
+        if(!config.getBoolean(path + ".format")) {DynamicJText.parseText((ColorChat.convert(player, config.getString(path)))).send(player);return;}
 
 
         ConfigurationSection section = config.getConfigurationSection(path + ".keys");
@@ -84,7 +84,7 @@ public class DynamicJsonHandler {
             }
             DynamicJText messageComponent = new DynamicJText(ColorChat.convert(player, block.getString("message")));
             if (block.get("hover") != null) {
-                if (block.getString("hover") != null) messageComponent.onHoverPlain(ColorChat.convert(player, block.getString("hover")));
+                if (block.getString("hover") != null) messageComponent.hoverPlain(ColorChat.convert(player, block.getString("hover")));
 
                 List<String> hover = block.getStringList("hover");
                 List<String> converted = new ArrayList<>();
@@ -92,13 +92,13 @@ public class DynamicJsonHandler {
                     converted.add(ColorChat.convert(player, s));
                 }
                 String[] convertedArray = converted.toArray(new String[0]);
-                messageComponent.onHoverPlain(convertedArray);
+                messageComponent.hover(convertedArray);
             }
 
             if (block.get("hover" + ".action") != null) {
                 if (block.get("hover" + ".value") == null)
                     Bukkit.getLogger().warning("[HypeAPI] The path " + path + "." + key + " does not contain a hover value.");
-                messageComponent.onHover(DynamicHoverAction.valueOf(block.getString("hover" + ".action")), ColorChat.placeholder(player, block.getString("hover" + ".value")));
+                messageComponent.hover(DynamicHoverAction.valueOf(block.getString("hover" + ".action")), ColorChat.placeholder(player, block.getString("hover" + ".value")));
             }
 
             if (block.getString("command") != null) messageComponent.command(block.getString("command"));
@@ -111,7 +111,7 @@ public class DynamicJsonHandler {
                 if (block.getString("click" + ".value") == null)
                     Bukkit.getLogger().warning("[HypeAPI] The path " + path + "." + key + " does not contain a click value.");
                 if (block.getString("click" + ".action") != null && block.getString("click" + ".value") != null)
-                    messageComponent.onClick(DynamicClickAction.valueOf(block.getString("click" + ".action")), ColorChat.convert(player, block.getString("click" + ".value")));
+                    messageComponent.click(DynamicClickAction.valueOf(block.getString("click" + ".action")), ColorChat.convert(player, block.getString("click" + ".value")));
             }
 
             if (block.get("gradient") != null) {
@@ -124,14 +124,18 @@ public class DynamicJsonHandler {
                         Bukkit.getLogger().warning("[HypeAPI] The path " + path + "." + key + " does not contain a gradient end.");
                         return;
                     }
-                    if (block.getString("gradient" + ".start") != null && block.getString("gradient" + ".end") != null)
-                        messageComponent.gradient(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))).finish();
-
+                    if (block.getString("gradient" + ".start") != null && block.getString("gradient" + ".end") != null) {
+                        messageComponent.gradient(true);
+                        messageComponent.add(new DynamicGradientComponent().colors(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))));
+                    }
                     if (block.getString("gradient" + ".start") != null && block.getString("gradient" + ".end") != null && block.getString("gradient" + ".align") != null) {
-                        if (CColor.GradientCenter.fromName(block.getString("gradient" + ".align")) == null)
-                            messageComponent.gradient(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))).center(CColor.GradientCenter.LEFT).finish();
+                        if (CColor.GradientCenter.fromName(block.getString("gradient" + ".align")) == null) {
+                            messageComponent.gradient(true);
+                            messageComponent.add(new DynamicGradientComponent().colors(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))).center(CColor.GradientCenter.LEFT));
+                        }
                         else {
-                            messageComponent.gradient(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))).center(CColor.GradientCenter.fromName(block.getString("gradient" + ".align"))).finish();
+                            messageComponent.gradient(true);
+                            messageComponent.add(new DynamicGradientComponent().colors(CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".start"))), CColor.fromHex(ColorChat.placeholder(player, block.getString("gradient" + ".end")))).center(CColor.GradientCenter.fromName(block.getString("gradient" + ".align"))));
                             Bukkit.getLogger().info("[HypeAPI] The path " + path + "." + key + " has a gradient align of " + block.getString("gradient" + ".align"));
                             Bukkit.getLogger().info("[HypeAPI] The path " + path + "." + key + " has a gradient start of " + block.getString("gradient" + ".start"));
                             Bukkit.getLogger().info("[HypeAPI] The path " + path + "." + key + " has a gradient start of " + block.getString("gradient" + ".end"));
@@ -151,10 +155,13 @@ public class DynamicJsonHandler {
                         Bukkit.getLogger().warning("[HypeAPI] The path " + path + "." + key + " does not contain 2 or more gradient colors.");
                         return;
                     }
-                    if (block.getString("gradient" + ".align") == null)
-                        messageComponent.gradient(cColors.toArray(new CColor[0])).finish();
+                    if (block.getString("gradient" + ".align") == null) {
+                        messageComponent.gradient(true);
+                        messageComponent.add(new DynamicGradientComponent().colors(cColors.toArray(new CColor[0])));
+                    }
                     else {
-                        messageComponent.gradient(cColors.toArray(new CColor[0])).center(CColor.GradientCenter.fromName(block.getString("gradient" + ".align"))).finish();
+                        messageComponent.gradient(true);
+                        messageComponent.add(new DynamicGradientComponent().colors(cColors.toArray(new CColor[0])).center(CColor.GradientCenter.fromName(block.getString("gradient" + ".align"))));
                         Bukkit.getLogger().info("[HypeAPI] The path " + path + "." + key + " has a gradient align of " + block.getString("gradient" + ".align"));
                         Bukkit.getLogger().info("[HypeAPI] The path " + path + "." + key + " has a gradient align of " + cColors);
                     }

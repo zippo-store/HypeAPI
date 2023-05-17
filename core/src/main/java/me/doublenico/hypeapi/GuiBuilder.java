@@ -8,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class GuiBuilder implements InventoryHolder, Listener {
 
@@ -53,7 +52,7 @@ public abstract class GuiBuilder implements InventoryHolder, Listener {
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public Inventory getInventory() {
         return this.inventory;
     }
 

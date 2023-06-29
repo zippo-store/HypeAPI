@@ -92,11 +92,11 @@ subprojects { subproj ->
 publishing {
     publications {
         maven(MavenPublication) {
+            from components.java
+
             groupId = 'me.doublenico'
             artifactId = 'HypeAPI'
             version = '1.0.1'
-
-            from components.java
         }
     }
 }

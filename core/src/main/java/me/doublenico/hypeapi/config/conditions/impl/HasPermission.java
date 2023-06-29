@@ -16,7 +16,7 @@ public class HasPermission extends Condition {
     }
 
     @Override
-    public String getIndentifier() {
+    public String getIdentifier() {
         return "permission";
     }
 

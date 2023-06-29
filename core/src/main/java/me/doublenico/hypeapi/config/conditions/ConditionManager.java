@@ -67,8 +67,6 @@ public class ConditionManager {
         return null;
     }
 
-
-
     public boolean check(Condition condition, Player player, String args){
 
         return condition.checkCondition(player, args);

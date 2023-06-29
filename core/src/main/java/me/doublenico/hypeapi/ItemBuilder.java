@@ -8,7 +8,6 @@ import me.doublenico.hypeapi.v1_8_R1.GlowEnchantment;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -83,31 +82,22 @@ public class ItemBuilder {
         return itemStack;
     }
 
-    public ItemStack build(){
-        if (amount != 0) itemStack.setAmount(amount);
-        if(itemStack.getItemMeta() == null) return itemStack;
-        ItemMeta meta = itemStack.getItemMeta();
-        if(name != null) meta.setDisplayName(name);
-        if(lore != null) meta.setLore(lore);
-        if(enchanted) meta.addEnchant(getGlowEnchantment(), 1, true);
-        if(hideFlags) meta.addItemFlags(ItemFlag.values());
-        if(hideAttributes) meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        if(hideEnchants) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        if(enchants != null && !enchants.isEmpty()) enchants.keySet().forEach(enchant -> meta.addEnchant(enchant, enchants.get(enchant), true));
-        if(customModelData != 0) meta.setCustomModelData(customModelData);
-        itemStack.setItemMeta(meta);
-        return itemStack;
+    public static boolean isValidConfigItem(Plugin plugin, ConfigManager config, String path) {
+        return config.getConfig().isSet(path + ".material");
     }
 
-    public static ItemStack getConfigItem(Plugin plugin, Player player, ConfigManager config, String path){
+    public static ItemStack getConfigItem(Plugin plugin, Player player, ConfigManager config, String path) {
         ItemBuilder itemBuilder = new ItemBuilder(plugin, config.getString(path + ".material"));
-        if (itemBuilder.isNumber(config.getString(path + ".amount"))) itemBuilder.setAmount(Integer.parseInt(ColorChat.convert(player, config.getString(path + ".amount"))));
+        if (itemBuilder.isNumber(config.getString(path + ".amount")))
+            itemBuilder.setAmount(Integer.parseInt(ColorChat.convert(player, config.getString(path + ".amount"))));
         else itemBuilder.setAmount(config.getInt(path + ".amount"));
         itemBuilder.setName(ColorChat.convert(player, ColorChat.placeholder(player, config.getString(path + ".name"))));
         itemBuilder.setLore(config.getStringList(path + ".lore").stream().map(s -> ColorChat.convert(player, s)).collect(Collectors.toList()));
-        if (itemBuilder.isBoolean(config.getString(path + ".enchanted"))) itemBuilder.setEnchanted(Boolean.parseBoolean(config.getString(path + ".enchanted")));
+        if (itemBuilder.isBoolean(config.getString(path + ".enchanted")))
+            itemBuilder.setEnchanted(Boolean.parseBoolean(config.getString(path + ".enchanted")));
         else itemBuilder.setEnchanted(config.getBoolean(path + ".enchanted"));
-        if (itemBuilder.isBoolean(config.getString(path + ".hideFlags"))) itemBuilder.setHideFlags(Boolean.parseBoolean(config.getString(path + ".hideFlags")));
+        if (itemBuilder.isBoolean(config.getString(path + ".hideFlags")))
+            itemBuilder.setHideFlags(Boolean.parseBoolean(config.getString(path + ".hideFlags")));
         else itemBuilder.setHideFlags(config.getBoolean(path + ".hideFlags"));
         if (itemBuilder.isBoolean(config.getString(path + ".hideAttributes"))) itemBuilder.setHideAttributes(Boolean.parseBoolean(config.getString(path + ".hideAttributes")));
         else itemBuilder.setHideAttributes(config.getBoolean(path + ".hideAttributes"));
@@ -156,6 +146,23 @@ public class ItemBuilder {
             }
         }
         return itemBuilder.build();
+    }
+
+    public ItemStack build(){
+        if (amount != 0) itemStack.setAmount(amount);
+        if(itemStack.getItemMeta() == null) return itemStack;
+        ItemMeta meta = itemStack.getItemMeta();
+        if(name != null) meta.setDisplayName(name);
+        if(lore != null) meta.setLore(lore);
+        if (enchanted) meta.addEnchant(getGlowEnchantment(), 1, true);
+        if (hideFlags) meta.addItemFlags(ItemFlag.values());
+        if (hideAttributes) meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        if (hideEnchants) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        if (enchants != null && !enchants.isEmpty())
+            enchants.keySet().forEach(enchant -> meta.addEnchant(enchant, enchants.get(enchant), true));
+        if (customModelData != 0) meta.setCustomModelData(customModelData);
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
     private Enchantment getGlowEnchantment(){

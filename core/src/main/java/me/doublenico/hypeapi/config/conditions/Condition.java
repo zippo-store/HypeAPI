@@ -12,7 +12,7 @@ public abstract class Condition {
 
     public abstract String getDescription();
 
-    public abstract String getIndentifier();
+    public abstract String getIdentifier();
 
     public abstract boolean checkCondition(Player player, String args);
 

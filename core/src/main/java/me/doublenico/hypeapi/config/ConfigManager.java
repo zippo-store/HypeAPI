@@ -186,12 +186,12 @@ public class ConfigManager {
             if (block.get(".condition") == null) continue;
             if (ConditionManager.getCondition(block.getString(".condition")) == null) continue;
             Condition condition = ConditionManager.getCondition(block.getString(".condition"));
-            if (condition == null){
+            if (condition == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "Could not find condition " + block.getString(".condition"));
                 continue;
             }
-            if (block.get(condition.getIndentifier()) == null) continue;
-            return condition.checkCondition(player, block.getString(condition.getIndentifier()));
+            if (block.get(condition.getIdentifier()) == null) continue;
+            return condition.checkCondition(player, block.getString(condition.getIdentifier()));
         }
         return true;
     }

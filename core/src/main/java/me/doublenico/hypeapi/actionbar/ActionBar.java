@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class ActionBar extends AbstractActionbar implements IActionBar{
 
     private static boolean cancelBroadcast = false;
-    private static HashMap<Player, Boolean> cancel = new HashMap<>();
+    private static final HashMap<Player, Boolean> cancel = new HashMap<>();
 
     @Override
     public void send() {

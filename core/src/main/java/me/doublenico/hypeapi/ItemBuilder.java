@@ -39,8 +39,8 @@ public class ItemBuilder {
 
     public ItemBuilder(XMaterial material) {
         this.material = material;
-        if (material.parseMaterial() == null) itemStack = new ItemStack(Material.DIRT);
-        else itemStack = new ItemStack(material.parseMaterial());
+        if (material.get() == null) itemStack = new ItemStack(Material.DIRT);
+        else itemStack = new ItemStack(material.get());
     }
 
     public ItemBuilder(Material material) {
@@ -50,15 +50,15 @@ public class ItemBuilder {
 
     public ItemBuilder(String material) {
         this.material = XMaterial.matchXMaterial(material).isPresent() ? XMaterial.matchXMaterial(material).get() : XMaterial.matchXMaterial(Material.DIRT);
-        if (this.material.parseMaterial() == null) itemStack = new ItemStack(Material.DIRT);
-        else itemStack = new ItemStack(this.material.parseMaterial());
+        if (this.material.get() == null) itemStack = new ItemStack(Material.DIRT);
+        else itemStack = new ItemStack(this.material.get());
     }
 
     public ItemBuilder(Plugin plugin, String material){
         this.material = XMaterial.matchXMaterial(material).isPresent() ? XMaterial.matchXMaterial(material).get() : XMaterial.matchXMaterial(Material.DIRT);
         this.plugin = plugin;
-        if (this.material.parseMaterial() == null) itemStack = new ItemStack(Material.DIRT);
-        else itemStack = new ItemStack(this.material.parseMaterial());
+        if (this.material.get() == null) itemStack = new ItemStack(Material.DIRT);
+        else itemStack = new ItemStack(this.material.get());
     }
 
     public ItemBuilder(Plugin plugin, Material material){
@@ -70,8 +70,27 @@ public class ItemBuilder {
     public ItemBuilder(Plugin plugin, XMaterial material){
         this.material = material;
         this.plugin = plugin;
-        if (material.parseMaterial() == null) itemStack = new ItemStack(Material.DIRT);
-        else itemStack = new ItemStack(material.parseMaterial());
+        if (material.get() == null) itemStack = new ItemStack(Material.DIRT);
+        else itemStack = new ItemStack(material.get());
+    }
+
+    public ItemBuilder(ItemStack itemStack) {
+        this.material = XMaterial.matchXMaterial(itemStack.getType()).or(XMaterial.DIRT);
+        this.itemStack = itemStack;
+        this.amount = itemStack.getAmount();
+        if (itemStack.getItemMeta() != null) {
+            ItemMeta meta = itemStack.getItemMeta();
+            this.name = meta.hasDisplayName() ? meta.getDisplayName() : null;
+            this.lore = meta.hasLore() ? meta.getLore() : null;
+            this.hideFlags = meta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES) || meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
+            this.hideAttributes = meta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES);
+            this.hideEnchants = meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
+            this.customModelData = meta.hasCustomModelData() ? meta.getCustomModelData() : 0;
+            this.enchanted = meta.hasEnchants() && meta.getEnchants().containsKey(getGlowEnchantment());
+            if (meta.hasEnchants()) {
+                this.enchants = new HashMap<>(meta.getEnchants());
+            }
+        }
     }
 
     public XMaterial getMaterial() {

@@ -1,10 +1,10 @@
 package me.doublenico.hypeapi.json;
 
-import dev.dynamicstudios.json.DynamicJText;
-import dev.dynamicstudios.json.data.component.DynamicGradientComponent;
-import dev.dynamicstudios.json.data.util.CColor;
-import dev.dynamicstudios.json.data.util.DynamicClickAction;
-import dev.dynamicstudios.json.data.util.DynamicHoverAction;
+import io.dynamicstudios.json.DynamicJText;
+import io.dynamicstudios.json.data.component.DynamicGradientComponent;
+import io.dynamicstudios.json.data.util.CColor;
+import io.dynamicstudios.json.data.util.DynamicClickAction;
+import io.dynamicstudios.json.data.util.DynamicHoverAction;
 import me.doublenico.hypeapi.actionbar.ActionBar;
 import me.doublenico.hypeapi.colors.ColorChat;
 import me.doublenico.hypeapi.title.Title;

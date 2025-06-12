@@ -1,7 +1,7 @@
 package me.doublenico.hypeapi.config.actions;
 
 import com.cryptomorin.xseries.XSound;
-import dev.dynamicstudios.json.DynamicJText;
+import io.dynamicstudios.json.DynamicJText;
 import me.doublenico.hypeapi.actionbar.ActionBar;
 import me.doublenico.hypeapi.colors.ColorChat;
 import me.doublenico.hypeapi.title.Title;

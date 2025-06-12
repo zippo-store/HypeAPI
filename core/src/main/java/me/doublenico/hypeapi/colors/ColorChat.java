@@ -1,8 +1,9 @@
 package me.doublenico.hypeapi.colors;
 
-import dev.dynamicstudios.json.DynamicJText;
-import dev.dynamicstudios.json.data.component.DynamicGradientComponent;
-import dev.dynamicstudios.json.data.util.CColor;
+
+import io.dynamicstudios.json.DynamicJText;
+import io.dynamicstudios.json.data.component.DynamicGradientComponent;
+import io.dynamicstudios.json.data.util.CColor;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.doublenico.hypeapi.VersionUtils;
 import net.md_5.bungee.api.chat.BaseComponent;

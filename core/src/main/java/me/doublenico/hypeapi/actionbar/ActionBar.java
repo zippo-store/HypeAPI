@@ -1,6 +1,6 @@
 package me.doublenico.hypeapi.actionbar;
 
-import dev.dynamicstudios.json.data.util.CColor;
+import io.dynamicstudios.json.data.util.CColor;
 import me.doublenico.hypeapi.VersionUtils;
 import me.doublenico.hypeapi.colors.ColorChat;
 import me.doublenico.hypeapi.v1_10_R1.ActionBar_v1_10_R1;
